@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{ useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import FadeLoader from "react-spinners/FadeLoader";
+import "./App.css";
+import InputBox from "./Components/InputBox";
+const Details = React.lazy(() => import('./Components/Details'));
 
-function App() {
+export default function App() {
+  const [birth, setBirth] = useState({});
+  const [astro, setAstro] = useState({});
+  const [gem, setGem] = useState([]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
+      <Routes>
+        <Route path="/" element={<InputBox setBirth={setBirth} setAstro={setAstro} setGem={setGem} /> }/>
+        <Route
+          path="/details"
+          element={
+           <React.Suspense fallback={<div><FadeLoader className="spinner" color="black" size={150} aria-label="Loading Spinner"/></div>}>
+              <Details birth={birth} astro={astro} gem={gem}/>
+            </React.Suspense>
+          }
+          />
+          <Route path="*" element={<div className="spinner">Not Found</div>}/>
+      </Routes>
+
     </div>
   );
 }
-
-export default App;
